@@ -28,20 +28,29 @@ module.exports = async (req, res) => {
   }
 
   console.log(`Parsing YAML`);
-  let config = null;
+  let proxies = [];
   try {
-    config = YAML.parse(configFile);
+    let config = YAML.parse(configFile);
+    for (const [key, value] of Object.entries(config.proxies)) {
+      if (
+        !value.name.includes("剩余流量") &&
+        !value.name.includes("剩余") &&
+        !value.name.includes("到期")
+      ) {
+        proxies.push(value);
+      }
+    }
     console.log(`👌 Parsed YAML`);
   } catch (error) {
     res.status(500).send(`Unable parse config, error: ${error}`);
     return;
   }
 
-  if (config.proxies === undefined) {
+  if (proxies === undefined) {
     res.status(400).send("No proxies in this config");
     return;
   }
-  const response = YAML.stringify({ proxies: config.proxies, ...rules.rules });
+  const response = YAML.stringify({ proxies: proxies, ...rules.rules });
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   res.status(200).send(response);
 };
