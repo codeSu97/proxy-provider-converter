@@ -3,6 +3,8 @@ import { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { SelectorIcon, DuplicateIcon } from "@heroicons/react/outline";
 import toast, { Toaster } from "react-hot-toast";
+const rules = require("./api/rules");
+const YAML = require("yaml");
 
 let host = "";
 if (typeof window !== "undefined") {
@@ -31,15 +33,6 @@ export default function Home() {
 
   const clashConfig = `# Clash 配置格式
 
-proxy-groups:
-  - name: UseProvider
-    type: select
-    use:
-      - ${urlHost || "provider1"}
-    proxies:
-      - Proxy
-      - DIRECT
-
 proxy-providers:
   ${urlHost || "provider1"}:
     type: http
@@ -51,6 +44,8 @@ proxy-providers:
       interval: 600
       # lazy: true
       url: http://www.gstatic.com/generate_204
+
+${YAML.stringify(rules.rules)}
 `;
 
   const surgeConfig = `# Surge 配置格式
