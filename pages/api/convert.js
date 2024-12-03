@@ -46,11 +46,11 @@ module.exports = async (req, res) => {
     return;
   }
 
-  if (proxies === undefined) {
+  if (proxies.length === 0) {
     res.status(400).send("No proxies in this config");
     return;
   }
-  const response = YAML.stringify({ proxies: proxies, ...rules.rules });
+  const response = YAML.stringify({ proxies: proxies, ...rules.default });
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   res.status(200).send(response);
 };

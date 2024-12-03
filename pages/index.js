@@ -45,7 +45,7 @@ proxy-providers:
       # lazy: true
       url: http://www.gstatic.com/generate_204
 
-${YAML.stringify(rules.rules)}
+${YAML.stringify(rules.default)}
 `;
 
   const surgeConfig = `# Surge 配置格式
